@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecocharge/Common/Toast.dart';
 import 'package:ecocharge/Common/bottom_nav_bar.dart';
 import 'package:ecocharge/Features/Reservation/reservation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
@@ -78,7 +80,7 @@ class _MapScreenState extends State<MapScreen> {
           // putting values inside clicked feature
           Map<String, dynamic> clickedFeature = {
             "name": featureName,
-            "downloadLink": featureConnectionType,
+            "connectionType": featureConnectionType,
             "description": featureDescription,
           };
           _showBottomSheet(context, clickedFeature);
@@ -125,13 +127,28 @@ class _MapScreenState extends State<MapScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  clickedFeature["name"],
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        clickedFeature["name"],
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    IconButton(onPressed: () async {
+                      await _addToFavorites(
+                        title: clickedFeature['name'],
+                        address: clickedFeature['description'],
+                        country: "Turkıye", // Replace with actual country value
+                      );
+                    }, icon: Icon(Icons.star_border, size: 24.0),)
+
+
+                  ],
                 ),
                 SizedBox(height: 10),
                 Text(
-                  clickedFeature["downloadLink"],
+                  clickedFeature["connectionType"],
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 10),
@@ -187,14 +204,7 @@ class _MapScreenState extends State<MapScreen> {
         onMapCreated: _onMapCreated,
         onMapClick: (point, latLng) async {
           _queryFeaturesAtPoint(point);
-          // Sample feature data
 
-          /*   ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(clickedFeature.toString()),
-              duration: Duration(seconds: 2), // Adjust duration as needed
-            ),
-          );*/
         },
         styleString: "mapbox://styles/basaktuysuz/clq2ny4mt01sh01qt1hd2d4zx",
         initialCameraPosition: CameraPosition(
@@ -208,5 +218,24 @@ class _MapScreenState extends State<MapScreen> {
       ),
 
     );
+  }
+
+  Future<void> _addToFavorites ({
+    required String title,
+    required String address,
+    required String country,
+  }) async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    final CollectionReference favoritePlacesRef = FirebaseFirestore.instance.collection('users').doc(userId).collection('favoritePlaces');
+
+
+    Map<String, dynamic> favoritePlaceData = {
+      'title': title,
+      'address': address,
+      'country': country,
+    };
+
+    await favoritePlacesRef.doc(title).set(favoritePlaceData);
+
   }
 }

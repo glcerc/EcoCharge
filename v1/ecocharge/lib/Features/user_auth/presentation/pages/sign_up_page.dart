@@ -158,15 +158,15 @@ class _SignUpPageState extends State<SignUpPage> {
     String password = _passwordController.text;
 
     User? user = await _auth.signUpWithEmailAndPassword(email, password);
-    collection.add({
+   final data3 = <String, dynamic>{
       'Uid' : user?.uid,
       'fullname': _fullnameController.text,
       'email': _emailController.text,
       'password': _passwordController.text,
       'phoneNo': _phoneController.text,
 
-    });
-
+    };
+    collection.doc(user?.uid).set(data3);
     setState(() {
       isSigningUp = false;
     });

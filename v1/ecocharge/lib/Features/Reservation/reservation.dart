@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class ReservationPage extends StatefulWidget {
   @override
@@ -27,28 +26,25 @@ class _ReservationPageState extends State<ReservationPage> {
     }
   }
 
-  void sendFirebaseReservationDate(String date,String time ){
+  void sendFirebaseReservationDate(String date, String time) {
     FirebaseAuth auth = FirebaseAuth.instance;
 
     String currentUserID = auth.currentUser!.uid;
 
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    final docUser = FirebaseFirestore.instance.collection('users').doc();
-        CollectionReference usersCollection = firestore.collection("users");
+    CollectionReference usersCollection = firestore.collection("users");
 
-    // Reference the user's document using their UID
-  //  DocumentReference userDocRef = usersCollection;
+    // user ıd alıyor
+    DocumentReference userDocRef = usersCollection.doc(currentUserID);
 
-    // Create a new collection under the user's document
-   // CollectionReference userReservationsCollection =
-   // userDocRef.collection("reservations");
+    // reservasyon collectionu oluşturuyor userın içinde
+    CollectionReference userReservationsCollection = userDocRef.collection("reservations");
 
-    docUser.set({
+    userReservationsCollection.add({
       'reservation Date': date,
       'reservation Time': time,
     });
-
   }
 
   @override
@@ -111,7 +107,8 @@ class _ReservationPageState extends State<ReservationPage> {
                             context: context,
                             builder: (context) => AlertDialog(
                               title: Text('Invalid Reservation Date'),
-                              content: Text('You cannot make a reservation for a past date or time.'),
+                              content: Text(
+                                  'You cannot make a reservation for a past date or time.'),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.of(context).pop(),
@@ -121,15 +118,19 @@ class _ReservationPageState extends State<ReservationPage> {
                             ),
                           );
                         } else {
-                          final String formattedDate = DateFormat('yyyy-MM-dd').format(_selectedDate);
-                          final String formattedTime = _selectedTime.format(context);
-                          sendFirebaseReservationDate(formattedDate,formattedTime);
+                          final String formattedDate =
+                              DateFormat('yyyy-MM-dd').format(_selectedDate);
+                          final String formattedTime =
+                              _selectedTime.format(context);
+                          sendFirebaseReservationDate(
+                              formattedDate, formattedTime);
 
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
                               title: Text('Reservation Confirmed'),
-                              content: Text('Your reservation for $formattedDate at $formattedTime has been confirmed.'),
+                              content: Text(
+                                  'Your reservation for $formattedDate at $formattedTime has been confirmed.'),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.of(context).pop(),
@@ -161,5 +162,3 @@ class _ReservationPageState extends State<ReservationPage> {
     );
   }
 }
-
-
