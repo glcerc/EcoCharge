@@ -24,7 +24,7 @@ class StationInfoPage extends StatelessWidget {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-                Icon(Icons.star_border, size: 24.0), // Favorite icon
+                Icon(Icons.star_border, size: 24.0), 
               ],
             ),
             SizedBox(height: 8),
@@ -41,7 +41,7 @@ class StationInfoPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Center(
-                child: Text('Station Image Placeholder'), // Replace with actual image
+                child: Text('Station Image Placeholder'), 
               ),
             ),
             SizedBox(height: 20),
@@ -63,7 +63,7 @@ class StationInfoPage extends StatelessWidget {
                   SizedBox(width: 10), // Minimal spacing
                   ElevatedButton(
                     onPressed: () {
-                      // Add navigation logic here
+                  
                     },
                     child: Text('Navigate'),
                   ),
