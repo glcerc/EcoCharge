@@ -97,7 +97,7 @@ class _ReservationPageState extends State<ReservationPage> {
                           final String formattedDate = DateFormat('yyyy-MM-dd').format(_selectedDate);
                           final String formattedTime = _selectedTime.format(context);
 
-                          // Show a simple confirmation dialog instead of storing data
+              
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
