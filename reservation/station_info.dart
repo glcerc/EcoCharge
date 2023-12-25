@@ -35,7 +35,7 @@ class StationInfoPage extends StatelessWidget {
             SizedBox(height: 20),
             Container(
               width: double.infinity,
-              height: 200, // Adjust size as needed
+              height: 200, 
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
                 borderRadius: BorderRadius.circular(8),
@@ -60,7 +60,7 @@ class StationInfoPage extends StatelessWidget {
                     },
                     child: Text('Make a Reservation'),
                   ),
-                  SizedBox(width: 10), // Minimal spacing
+                  SizedBox(width: 10), 
                   ElevatedButton(
                     onPressed: () {
                   
