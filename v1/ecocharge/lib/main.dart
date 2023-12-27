@@ -2,6 +2,7 @@ import 'package:ecocharge/Features/Reservation/reservation.dart';
 import 'package:ecocharge/Features/splash_screen/splash_screen.dart';
 import 'package:ecocharge/Features/user_auth/presentation/pages/home_page.dart';
 import 'package:ecocharge/Features/user_auth/presentation/pages/login_page.dart';
+import 'package:ecocharge/Features/user_auth/presentation/pages/profile_page.dart';
 import 'package:ecocharge/Features/user_auth/presentation/pages/sign_up_page.dart';
 import 'package:ecocharge/Map/map_screen.dart';
 import 'package:flutter/foundation.dart';
@@ -72,6 +73,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/reservation': (context) => ReservationPage(),
         '/map': (context) => MapScreen(),
+        '/profile': (context) => ProfilePage(),
         '/signUp': (context) => SignUpPage(),
         '/home': (context) => HomePage(),
       },

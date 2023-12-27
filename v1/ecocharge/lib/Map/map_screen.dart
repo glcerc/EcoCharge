@@ -195,7 +195,7 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('EcoCharge'),
-        backgroundColor: Colors.orange,
+        backgroundColor: Colors.green,
       ),
       body: MapboxMap(
         myLocationEnabled: true,

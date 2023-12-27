@@ -1,19 +1,20 @@
+import 'package:ecocharge/Common/Toast.dart';
 import 'package:ecocharge/Common/bottom_nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../common/toast.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-
+  String fullName = '';
   int _selectedIndex = 0;
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -22,8 +23,6 @@ class _HomePageState extends State<HomePage> {
         case 0:
         // Navigate to Home
         // You can add your logic or navigate to the appropriate screen
-
-
           break;
         case 1:
         // Navigate to Map
@@ -31,8 +30,7 @@ class _HomePageState extends State<HomePage> {
           showToast(message: "Map screen loading");
           break;
         case 2:
-        // Navigate to Profile or any other screen
-        // You can add your logic or navigate to the appropriate screen
+          Navigator.pushNamed(context, "/profile");
           break;
         default:
         // Navigate to Home as default
@@ -42,25 +40,45 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> _fetchUserInfo() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .get();
+
+      setState(() {
+        fullName = userSnapshot['fullname'];
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text("HomePage"),
+        title: const Text("HomePage"),
+        backgroundColor: Colors.red,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+
         children: [
           Center(
-              child: Text(
-            "Welcome Home buddy!",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
-          )),
-          SizedBox(
-            height: 30,
+            child: Text(
+              'Welcome $fullName!',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
+            ),
           ),
+          SizedBox(height: 30),
           GestureDetector(
             onTap: () {
               FirebaseAuth.instance.signOut();
@@ -71,21 +89,22 @@ class _HomePageState extends State<HomePage> {
               height: 45,
               width: 100,
               decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(10)),
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(10),
+              ),
               child: Center(
                 child: Text(
                   "Sign out",
                   style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
                 ),
               ),
             ),
           ),
-          SizedBox(
-            height: 30,
-          ),
+          SizedBox(height: 30),
           GestureDetector(
             onTap: () {
               Navigator.pushNamed(context, "/map");
@@ -95,25 +114,27 @@ class _HomePageState extends State<HomePage> {
               height: 45,
               width: 100,
               decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(10)),
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(10),
+              ),
               child: Center(
                 child: Text(
                   "Map",
                   style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
-
-          bottomNavigationBar: BottomNavBar(
-            selectedIndex: 0,
-            onItemTapped: _onItemTapped,
-        ),
+      bottomNavigationBar: BottomNavBar(
+        selectedIndex: 0,
+        onItemTapped: _onItemTapped,
+      ),
     );
   }
 }

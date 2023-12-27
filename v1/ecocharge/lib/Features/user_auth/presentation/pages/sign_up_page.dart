@@ -161,6 +161,7 @@ class _SignUpPageState extends State<SignUpPage> {
    final data3 = <String, dynamic>{
       'Uid' : user?.uid,
       'fullname': _fullnameController.text,
+     'username': _usernameController.text,
       'email': _emailController.text,
       'password': _passwordController.text,
       'phoneNo': _phoneController.text,
