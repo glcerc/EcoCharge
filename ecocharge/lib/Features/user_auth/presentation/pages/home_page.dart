@@ -21,20 +21,18 @@ class _HomePageState extends State<HomePage> {
       // Navigate to different pages based on the selected index
       switch (_selectedIndex) {
         case 0:
-        // Navigate to Home
-        // You can add your logic or navigate to the appropriate screen
+        // Home
           break;
         case 1:
         // Navigate to Map
-          Navigator.pushNamed(context, "/map");
+          Navigator.popAndPushNamed(context, "/map");
           showToast(message: "Map screen loading");
           break;
         case 2:
+        // Navigate to Profile
           Navigator.pushNamed(context, "/profile");
           break;
         default:
-        // Navigate to Home as default
-        // You can add your logic or navigate to the appropriate screen
           break;
       }
     });
@@ -76,57 +74,6 @@ class _HomePageState extends State<HomePage> {
             child: Text(
               'Welcome $fullName!',
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
-            ),
-          ),
-          SizedBox(height: 30),
-          GestureDetector(
-            onTap: () {
-              FirebaseAuth.instance.signOut();
-              Navigator.pushNamed(context, "/login");
-              showToast(message: "Successfully signed out");
-            },
-            child: Container(
-              height: 45,
-              width: 100,
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Text(
-                  "Sign out",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: 30),
-          GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, "/map");
-              showToast(message: "Map screen loading");
-            },
-            child: Container(
-              height: 45,
-              width: 100,
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Text(
-                  "Map",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
             ),
           ),
         ],

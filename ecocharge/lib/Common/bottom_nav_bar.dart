@@ -11,10 +11,9 @@ class BottomNavBar extends StatelessWidget {
 
 
   static const List<Color> _bgColors = [
-    Colors.red,
-    Colors.green,
-    Colors.purple,
-    Colors.pink,
+    Colors.red,     //color for home
+    Colors.green,   //color for map
+    Colors.purple,  //color for profile
   ];
 
   @override
@@ -37,11 +36,13 @@ class BottomNavBar extends StatelessWidget {
           backgroundColor: Colors.purple,
         ),
       ],
+
       currentIndex: selectedIndex,
+      //selected item bg
       selectedItemColor: Colors.amber[800],
       onTap: onItemTapped,
       backgroundColor: _bgColors[selectedIndex],
-      // Set fixedColor to change background color when item is selected
+
 
     );
   }

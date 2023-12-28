@@ -51,7 +51,7 @@ class _ReservationPageState extends State<ReservationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select Reservation Date and Time'),
+        title: const Text('Select Reservation Date and Time'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -69,7 +69,7 @@ class _ReservationPageState extends State<ReservationPage> {
                     _selectedDate = selectedDay;
                   });
                 },
-                calendarStyle: CalendarStyle(
+                calendarStyle: const CalendarStyle(
                   selectedDecoration: BoxDecoration(
                     color: Colors.blue,
                     shape: BoxShape.circle,
@@ -80,14 +80,14 @@ class _ReservationPageState extends State<ReservationPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ListTile(
-                leading: Icon(Icons.access_time),
-                title: Text('Select Time'),
-                subtitle: Text('${_selectedTime.format(context)}'),
+                leading: const Icon(Icons.access_time),
+                title: const Text('Select Time'),
+                subtitle: Text(_selectedTime.format(context)),
                 onTap: () => _selectTime(context),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(
@@ -106,13 +106,13 @@ class _ReservationPageState extends State<ReservationPage> {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: Text('Invalid Reservation Date'),
-                              content: Text(
+                              title: const Text('Invalid Reservation Date'),
+                              content: const Text(
                                   'You cannot make a reservation for a past date or time.'),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.of(context).pop(),
-                                  child: Text('OK'),
+                                  child: const Text('OK'),
                                 ),
                               ],
                             ),
@@ -128,29 +128,29 @@ class _ReservationPageState extends State<ReservationPage> {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: Text('Reservation Confirmed'),
+                              title: const Text('Reservation Confirmed'),
                               content: Text(
                                   'Your reservation for $formattedDate at $formattedTime has been confirmed.'),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.of(context).pop(),
-                                  child: Text('OK'),
+                                  child: const Text('OK'),
                                 ),
                               ],
                             ),
                           );
                         }
                       },
-                      child: Text('Confirm Reservation'),
+                      child: const Text('Confirm Reservation'),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text('Exit'),
+                      child: const Text('Exit'),
                     ),
                   ),
                 ],

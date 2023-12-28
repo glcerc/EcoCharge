@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecocharge/Common/Toast.dart';
 import 'package:ecocharge/Common/bottom_nav_bar.dart';
@@ -11,6 +10,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
 class MapScreen extends StatefulWidget {
+  const MapScreen({super.key});
+
   @override
   _MapScreenState createState() => _MapScreenState();
 }
@@ -22,7 +23,6 @@ class _MapScreenState extends State<MapScreen> {
 
   final String accessToken =
       'sk.eyJ1IjoiYmFzYWt0dXlzdXoiLCJhIjoiY2xxMnA0OHgxMDM3eTJpbzR0YjYzM3ZuaCJ9.VAPsg2uAHOUutHfEQNW1xg';
-
   //secret olanı bu
 
   @override
@@ -32,26 +32,23 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   int _selectedIndex = 0;
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      // Navigate to different pages based on the selected index
+      // navigating to different pages based on the selected index
       switch (_selectedIndex) {
         case 0:
-        // Navigate to Home
-        // You can add your logic or navigate to the appropriate screen
+          // Navigate to Home
           Navigator.pushNamed(context, "/home");
-
           break;
         case 1:
+          //map is selected doing nothing
           break;
         case 2:
-        // Navigate to Profile or any other screen
-        // You can add your logic or navigate to the appropriate screen
+          Navigator.pushNamed(context, "/profile");
           break;
         default:
-        // Navigate to Home as default
-        // You can add your logic or navigate to the appropriate screen
           break;
       }
     });
@@ -132,53 +129,52 @@ class _MapScreenState extends State<MapScreen> {
                     Expanded(
                       child: Text(
                         clickedFeature["name"],
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    IconButton(onPressed: () async {
-                      await _addToFavorites(
-                        title: clickedFeature['name'],
-                        address: clickedFeature['description'],
-                        country: "Turkıye", // Replace with actual country value
-                      );
-                    }, icon: Icon(Icons.star_border, size: 24.0),)
-
-
+                    IconButton(
+                      onPressed: () async {
+                        await _addToFavorites(
+                          title: clickedFeature['name'],
+                          address: clickedFeature['description'],
+                          country: "Turkıye", //country name as default
+                        );
+                      },
+                      icon: const Icon(Icons.star_border, size: 24.0),
+                    )
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   clickedFeature["connectionType"],
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   clickedFeature["description"],
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        // Handle navigation or other actions
-                        // Replace this with your actual logic
-                        // Close bottom sheet
+                        //navigation button not imp. yet
                       },
-                      child: Text('Start Navigation'),
+                      child: const Text('Start Navigation'),
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        // Handle reservation or other actions
-                        // Replace this with your actual logic
+                        //when tapping on make reservation going to reservation page
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ReservationPage()),
-
+                          MaterialPageRoute(
+                              builder: (context) => ReservationPage()),
                         ); // Close bottom sheet
                       },
-                      child: Text('Make Reservation'),
+                      child: const Text('Make Reservation'),
                     ),
                   ],
                 ),
@@ -194,7 +190,7 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('EcoCharge'),
+        title: const Text('EcoCharge'),
         backgroundColor: Colors.green,
       ),
       body: MapboxMap(
@@ -204,10 +200,9 @@ class _MapScreenState extends State<MapScreen> {
         onMapCreated: _onMapCreated,
         onMapClick: (point, latLng) async {
           _queryFeaturesAtPoint(point);
-
         },
         styleString: "mapbox://styles/basaktuysuz/clq2ny4mt01sh01qt1hd2d4zx",
-        initialCameraPosition: CameraPosition(
+        initialCameraPosition: const CameraPosition(
           target: LatLng(0, 0),
           zoom: 11.0,
         ),
@@ -216,26 +211,26 @@ class _MapScreenState extends State<MapScreen> {
         selectedIndex: 1,
         onItemTapped: _onItemTapped,
       ),
-
     );
   }
 
-  Future<void> _addToFavorites ({
+  Future<void> _addToFavorites({
     required String title,
     required String address,
     required String country,
   }) async {
+    showToast(message: "Station added to Favorites");
     final userId = FirebaseAuth.instance.currentUser?.uid;
-    final CollectionReference favoritePlacesRef = FirebaseFirestore.instance.collection('users').doc(userId).collection('favoritePlaces');
-
+    final CollectionReference favoritePlacesRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('favoritePlaces');
 
     Map<String, dynamic> favoritePlaceData = {
       'title': title,
       'address': address,
       'country': country,
     };
-
     await favoritePlacesRef.doc(title).set(favoritePlaceData);
-
   }
 }

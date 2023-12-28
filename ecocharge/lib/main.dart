@@ -1,11 +1,14 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'package:ecocharge/Features/Reservation/reservation.dart';
+import 'package:ecocharge/Features/splash_screen/splash_screen.dart';
+import 'package:ecocharge/Features/user_auth/presentation/pages/home_page.dart';
+import 'package:ecocharge/Features/user_auth/presentation/pages/login_page.dart';
+import 'package:ecocharge/Features/user_auth/presentation/pages/profile_page.dart';
+import 'package:ecocharge/Features/user_auth/presentation/pages/sign_up_page.dart';
+import 'package:ecocharge/Map/map_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth
-import 'package:eco_charge/features/splash_screen/splash_screen.dart';
-import 'package:eco_charge/features/user_auth/presentation/pages/home_page.dart';
-import 'package:eco_charge/features/user_auth/presentation/pages/login_page.dart';
-import 'package:eco_charge/features/user_auth/presentation/pages/sign_up_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +19,7 @@ Future main() async {
         appId: "1:540215271818:web:8b22d4aee01acdce862873",
         messagingSenderId: "540215271818",
         projectId: "flutter-firebase-9c136",
-        // Your web Firebase config options
+        // our web Firebase config options
       ),
     );
   } else {
@@ -24,6 +27,7 @@ Future main() async {
   }
   runApp(MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   @override
@@ -34,10 +38,12 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Firebase',
       routes: {
         '/': (context) => SplashScreen(
-          // Here, you can decide whether to show the LoginPage or HomePage based on user authentication
           child: LoginPage(),
         ),
         '/login': (context) => LoginPage(),
+        '/reservation': (context) => ReservationPage(),
+        '/map': (context) => MapScreen(),
+        '/profile': (context) => ProfilePage(),
         '/signUp': (context) => SignUpPage(),
         '/home': (context) => HomePage(),
       },

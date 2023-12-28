@@ -25,6 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+    //getting user info with _fetch method
     _fetch();
   }
 
@@ -53,6 +54,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(height: 16.0),
+                  //getting the value for username edittext
                   _buildEditableField("Username", usernameController, username),
                   SizedBox(height: 16.0),
                   _buildEditableField("Email", emailController, email),
@@ -68,10 +70,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       _saveProfileChanges();
                     },
                     icon: Icon(Icons.published_with_changes),
-                    // Add your desired icon here
                     label: Text('Save Changes'),
                   ),
                   const SizedBox(height: 8.0),
+                  //creating buttons
                   _buildButton(
                       context, 'Settings and Security', Icons.settings),
                   const SizedBox(height: 8.0),
@@ -104,6 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  //getting user doc
   void _fetch() async {
     final firebaseUser = FirebaseAuth.instance.currentUser;
     if (firebaseUser != null) {
@@ -125,6 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
       });
     }
   }
+
 
   Future<void> _performSaveAction() async {
     final firebaseUser = FirebaseAuth.instance.currentUser;
@@ -148,6 +152,8 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
   }
+
+
   Future<void> _saveProfileChanges() async {
     // Show a confirmation dialog
     showDialog(
@@ -166,7 +172,7 @@ class _ProfilePageState extends State<ProfilePage> {
             TextButton(
               onPressed: () async {
                 Navigator.of(context).pop(); // Close the dialog
-                // Perform the save action if the user confirms
+                // perdom save if user clicks confirm
                 await _performSaveAction();
               },
               child: Text('Confirm'),
@@ -196,7 +202,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   int _selectedIndex = 0;
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -212,6 +217,7 @@ class _ProfilePageState extends State<ProfilePage> {
           showToast(message: "Map screen loading");
           break;
         case 2:
+          //profile is already selected do nothing
           break;
         default:
           break;

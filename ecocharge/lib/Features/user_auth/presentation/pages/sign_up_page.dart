@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:eco_charge/features/user_auth/firebase_auth_implementation/firebase_auth_services.dart';
-import 'package:eco_charge/features/user_auth/presentation/pages/login_page.dart';
-import 'package:eco_charge/features/user_auth/presentation/widgets/form_container_widget.dart';
-import 'package:eco_charge/common/toast.dart';
+import 'package:ecocharge/features/user_auth/firebase_auth_implementation/firebase_auth_services.dart';
+import 'package:ecocharge/features/user_auth/presentation/pages/login_page.dart';
+import 'package:ecocharge/features/user_auth/presentation/widgets/form_container_widget.dart';
+import 'package:ecocharge/common/toast.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -16,6 +17,8 @@ class _SignUpPageState extends State<SignUpPage> {
   final FirebaseAuthService _auth = FirebaseAuthService();
 
   TextEditingController _usernameController = TextEditingController();
+  TextEditingController _fullnameController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
@@ -34,7 +37,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text("SignUp"),
+        title: const Text("SignUp"),
       ),
       body: Center(
         child: Padding(
@@ -42,19 +45,26 @@ class _SignUpPageState extends State<SignUpPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 "Sign Up",
                 style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
+              ),
+              FormContainerWidget(
+                controller: _fullnameController,
+                hintText: "Fullname",
+                isPasswordField: false,
+              ), const SizedBox(
+                height: 10,
               ),
               FormContainerWidget(
                 controller: _usernameController,
                 hintText: "Username",
                 isPasswordField: false,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               FormContainerWidget(
@@ -62,7 +72,15 @@ class _SignUpPageState extends State<SignUpPage> {
                 hintText: "Email",
                 isPasswordField: false,
               ),
-              SizedBox(
+              const SizedBox(
+                height: 10,
+              ),
+              FormContainerWidget(
+                controller: _phoneController,
+                hintText: "Phone no",
+                isPasswordField: false,
+              ),
+              const SizedBox(
                 height: 10,
               ),
               FormContainerWidget(
@@ -70,7 +88,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 hintText: "Password",
                 isPasswordField: true,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               GestureDetector(
@@ -86,21 +104,21 @@ class _SignUpPageState extends State<SignUpPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
-                      child: isSigningUp ? CircularProgressIndicator(color: Colors.white,):Text(
+                      child: isSigningUp ? const CircularProgressIndicator(color: Colors.white,):const Text(
                         "Sign Up",
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       )),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Already have an account?"),
-                  SizedBox(
+                  const Text("Already have an account?"),
+                  const SizedBox(
                     width: 5,
                   ),
                   GestureDetector(
@@ -108,10 +126,10 @@ class _SignUpPageState extends State<SignUpPage> {
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => LoginPage()),
+                                builder: (context) => const LoginPage()),
                                 (route) => false);
                       },
-                      child: Text(
+                      child: const Text(
                         "Login",
                         style: TextStyle(
                             color: Colors.blue, fontWeight: FontWeight.bold),
@@ -126,6 +144,10 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _signUp() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    // / Determine the collection name based on the dropdown value
+
+    CollectionReference collection = firestore.collection("users");
 
     setState(() {
       isSigningUp = true;
@@ -136,7 +158,16 @@ class _SignUpPageState extends State<SignUpPage> {
     String password = _passwordController.text;
 
     User? user = await _auth.signUpWithEmailAndPassword(email, password);
+   final data3 = <String, dynamic>{
+      'Uid' : user?.uid,
+      'fullname': _fullnameController.text,
+     'username': _usernameController.text,
+      'email': _emailController.text,
+      'password': _passwordController.text,
+      'phoneNo': _phoneController.text,
 
+    };
+    collection.doc(user?.uid).set(data3);
     setState(() {
       isSigningUp = false;
     });

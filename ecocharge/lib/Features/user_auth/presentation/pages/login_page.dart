@@ -1,14 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecocharge/Features/user_auth/firebase_auth_implementation/firebase_auth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:eco_charge/features/user_auth/presentation/pages/sign_up_page.dart';
-import 'package:eco_charge/features/user_auth/presentation/widgets/form_container_widget.dart';
-import 'package:eco_charge/common/toast.dart';
+import 'package:ecocharge/features/user_auth/presentation/pages/sign_up_page.dart';
+import 'package:ecocharge/features/user_auth/presentation/widgets/form_container_widget.dart';
+import 'package:ecocharge/common/toast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-import '../../firebase_auth_implementation/firebase_auth_services.dart';
 
 
 class LoginPage extends StatefulWidget {
